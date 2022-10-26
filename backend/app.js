@@ -123,7 +123,7 @@ app.post('/uploaded_files', upload.single('file'), (req, res) => {
         return element !== undefined;
       });
 
-      var updatedSrc = fs.readFileSync('C:\\Users\\Tec\\React Native Applications\\Upload-main\\backend\\updated-src\\'+file);
+      var updatedSrc = fs.readFileSync('C:\\Users\\Tec\\React Native Applications\\Upload-main\\backend\\updatedFiles\\'+file);
       astUpdated = babelParser.parse(updatedSrc.toString(), {
         sourceType: "module",
         plugins: [
