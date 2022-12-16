@@ -8,6 +8,8 @@ import './App.css';
 import { useState } from 'react';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import Tree from 'react-d3-tree';
+import './custom-tree.css';
 
 // import image  from './images/image.svg'
 function TabPanel(props) {
@@ -29,7 +31,7 @@ function TabPanel(props) {
   );
 }
 
-function Tree({ treeData }) {
+function TreeCust ({ treeData }) {
   return (
     <ul>
       {treeData.map((node) => (
@@ -40,7 +42,7 @@ function Tree({ treeData }) {
 }
 
 function TreeNode({ node }) {
-  const { children, label } = node;
+  const { children, name } = node;
   const [showChildren, setShowChildren] = useState(false);
   const handleClick = () => {
     setShowChildren(!showChildren);
@@ -48,10 +50,57 @@ function TreeNode({ node }) {
   return (
     <>
       <div onClick={handleClick} style={{ marginBottom: "10px" }}>
-        <span style={{color: node.color}}>{label}</span>
+        <span style={{color: node.color}}>{name}</span>
       </div>
       <ul style={{ paddingLeft: "10px", borderLeft: "1px solid black" }}>
-        {showChildren && children && <Tree treeData={children} />}
+        {showChildren && children && 
+        <>
+          <ul>Updates 
+          { children.find(o => o.name === 'Updates')['children'].length >0  ?
+              <div style={{ width: "100%", height: "100vh" }}>
+                <Tree
+                data={children.find(o => o.name === 'Updates')}
+                rootNodeClassName="node__root"
+                branchNodeClassName="node__branch"
+                leafNodeClassName="node__leaf" 
+                pathFunc="step"
+                orientation="vertical"
+                zoomable={false}
+                translate={{ x: 500, y: 100 }}
+                />
+              </div>
+            :<div></div>}
+          </ul>
+          <ul>Deletions
+          { children.find(o => o.name === 'Deletions')['children'].length >0 ?
+            <div style={{ width: "100%", height: "100vh" }}>
+              <Tree data={children.find(o => o.name === 'Deletions')}
+              rootNodeClassName="node__root"
+              branchNodeClassName="node__branch"
+              leafNodeClassName="node__leaf"
+              pathFunc="step"
+              orientation="vertical"
+              zoomable={false}
+              translate={{ x: 500, y: 100 }}
+              />
+            </div> :<div></div>}
+          </ul>
+          <ul>Placements
+            { children.find(o => o.name === 'Placements')['children'].length >0 ? 
+            <div style={{ width: "100%", height: "80vh" }}>
+              <Tree  data={children.find(o => o.name === 'Placements')} 
+              rootNodeClassName="node__root"
+              branchNodeClassName="node__branch"
+              leafNodeClassName="node__leaf"  
+              pathFunc="step"
+              orientation="vertical"
+              zoomable={false}
+              translate={{ x: 500, y: 100 }}
+            />
+            </div>
+            : <div></div>}
+          </ul>
+        </>}
       </ul>
     </>
   );
@@ -103,7 +152,7 @@ export default function BasicTabs() {
         }
     };
   }
-
+  
   return (
     <div>
       <p onClick={notify}></p>
@@ -132,7 +181,7 @@ export default function BasicTabs() {
             treeElements.map((element, key) => (
               <div>
                 <p style={{color: 'green'}}><b>{element.key}</b></p>
-                <Tree treeData={element.nodes} /> 
+                <TreeCust treeData={element.nodes} /> 
               </div>  
             ))
           }
@@ -141,3 +190,55 @@ export default function BasicTabs() {
     </div>
   );
 }
+// import React from 'react';
+// import Tree from 'react-d3-tree';
+
+// // This is a simplified example of an org chart with a depth of 2.
+// // Note how deeper levels are defined recursively via the `children` property.
+// const orgChart = {
+//   name: 'CEO',
+//   children: [
+//     {
+//       name: 'Manager',
+//       attributes: {
+//         department: 'Production',
+//       },
+//       children: [
+//         {
+//           name: 'Foreman',
+//           attributes: {
+//             department: 'Fabrication',
+//           },
+//           children: [
+//             {
+//               name: 'Worker',
+//             },
+//           ],
+//         },
+//         {
+//           name: 'Foreman',
+//           attributes: {
+//             department: 'Assembly',
+//           },
+//           children: [
+//             {
+//               name: 'Worker',
+//             },
+//           ],
+//         },
+//       ],
+//     },
+//   ],
+// };
+
+// export default function OrgChartTree() {
+//   return (
+//     // `<Tree />` will fill width/height of its container; in this case `#treeWrapper`.
+//     <div id="treeWrapper" style={{ width: '50em', height: '50em' }}>
+//       <Tree data={orgChart}
+      //  rootNodeClassName="node__root"
+      //  branchNodeClassName="node__branch"
+      //  leafNodeClassName="node__leaf" />
+//     </div>
+//   );
+// }
