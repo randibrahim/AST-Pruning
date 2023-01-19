@@ -85,7 +85,6 @@ app.post('/uploaded_files', upload.single('file'), (req, res) => {
       }
 
       dependencies = respo.obj(); // the dependencies as an object
-
       buildPaths(rootName, dependencies, [], paths);
 
       // MongoClient.connect(url, function(err, db) {
@@ -273,18 +272,24 @@ app.post('/uploaded_files', upload.single('file'), (req, res) => {
               placementsChildren.push(object);
             }
 
-            updates['key'] = index + "-" + index;
-            updates['name'] = "Updates";
-            updates['children'] = updatesChildren;
+            if(updatesChildren.length > 0) {
+              updates['key'] = index + "-" + index;
+              updates['name'] = "Updates";
+              updates['children'] = updatesChildren;
+            }
 
-            deletions['key'] = index + "-" + (index + 1);
-            deletions['name'] = "Deletions";
-            deletions['children'] = deletionChildren;
-
-            placements['key'] = index + "-" + (index + 2);
-            placements['name'] = "Placements";
-            placements['children'] = placementsChildren;
+            if(deletionChildren.length > 0) {
+              deletions['key'] = index + "-" + (index + 1);
+              deletions['name'] = "Deletions";
+              deletions['children'] = deletionChildren;
+            }
+            if(placementsChildren.length > 0) {
+              placements['key'] = index + "-" + (index + 2);
+              placements['name'] = "Placements";
+              placements['children'] = placementsChildren;
+            }
           }
+
           children.push(updates, deletions, placements);
           treeNode['children'] = children;
           treeData.push(treeNode);
@@ -295,6 +300,8 @@ app.post('/uploaded_files', upload.single('file'), (req, res) => {
 
   setTimeout(() => {
     // Object.assign to append to the object
+    console.log(finalPathsArray[0]);
+
     jsonObj = Object.assign(jsonObj, { 'treeElements': finalPathsArray });
     res.json(jsonObj);
   }, 4000);
