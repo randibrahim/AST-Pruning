@@ -56,7 +56,7 @@ function TreeNode({ node }) {
         {showChildren && children && 
         <>
           <ul>Updates 
-          { children.find(o => o.name === 'Updates')['children'].length >0  ?
+          {typeof children.find(o => o.name === 'Updates') !== 'undefined'  ?
               <div style={{ width: "100%", height: "100vh" }}>
                 <Tree
                 data={children.find(o => o.name === 'Updates')}
@@ -72,7 +72,7 @@ function TreeNode({ node }) {
             :<div></div>}
           </ul>
           <ul>Deletions
-          { children.find(o => o.name === 'Deletions')['children'].length >0 ?
+          {typeof children.find(o => o.name === 'Deletions') !=='undefined' ?
             <div style={{ width: "100%", height: "100vh" }}>
               <Tree data={children.find(o => o.name === 'Deletions')}
               rootNodeClassName="node__root"
@@ -86,7 +86,7 @@ function TreeNode({ node }) {
             </div> :<div></div>}
           </ul>
           <ul>Placements
-            { children.find(o => o.name === 'Placements')['children'].length >0 ? 
+            {typeof children.find(o => o.name === 'Placements') !=='undefined' ? 
             <div style={{ width: "100%", height: "80vh" }}>
               <Tree  data={children.find(o => o.name === 'Placements')} 
               rootNodeClassName="node__root"

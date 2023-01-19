@@ -1,0 +1,11 @@
+/* custom-tree.css */
+
+.node__root > circle {
+    fill: red;
+  }
+  
+  .node__branch > circle {
+    fill: yellow;
+  }
+
+  
